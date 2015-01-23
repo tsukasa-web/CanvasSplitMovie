@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="format-detection" content="telephone=no">
+    <title>CanvasSplitMovie Sample1</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/CanvasSplitMovie_Sample1.css">
+</head>
+<body>
+    <div class="loading"><p>NOW LOADING ...</p></div>
+    <div id="full-canvas-parent"></div>
+
+    <div class="btn-bg">
+        <div class="btn-wrapper">
+            <p>
+                <a href="#" class="start-btn btn">START</a>
+                <a href="#" class="fullstart-btn btn">FULL PANEL START</a>
+                <a href="#" class="stop-btn btn">STOP</a>
+                <a href="#" class="clear-btn btn">CLEAR</a>
+            </p>
+            <p>
+                <a href="#" class="changeNum-btn btn">CHANGE 15PANELS</a>
+                <a href="#" class="fps-btn btn">CHANGE 60FPS</a>
+            </p>
+        </div>
+    </div>
+
+
+    <script src="js/jquery-2.1.1.min.js"></script>
+    <script src="js/velocity.min.js"></script>
+    <script src="js/CanvasSplitMovie.js"></script>
+
+    <script>
+        (function() {
+            var url = "img/sprite.jpg";
+            var ImgData = new Image();
+            var CanvasSplitMovie_01;
+
+            ImgData.onload = (function() {
+                var targetCanvas_01 = $('#full-canvas-parent');
+                targetCanvas_01.CanvasSplitMovie({
+                    splitNum: 10,
+                    targetImgArray: [ImgData],
+                    sceneWidth:240,
+                    sceneHeight: 135,
+                    fps: 30
+                });
+                CanvasSplitMovie_01 = targetCanvas_01.data('CanvasSplitMovie');
+
+                $('.loading').velocity({
+                    opacity: 0
+                }, {
+                    delay: 500,
+                    display: 'none',
+                    duration: 600,
+                    easing: 'easeOutQuint',
+                    complete: function() {
+                        $('.start-btn').on('click', CanvasSplitMovie_01.drawLoopStart);
+                        $('.fullstart-btn').on('click', CanvasSplitMovie_01.drawFullLoopStart);
+                        $('.stop-btn').on('click', CanvasSplitMovie_01.drawLoopStop);
+                        $('.changeNum-btn').on('click', function() {
+                            return CanvasSplitMovie_01.changeSplitNum(15);
+                        });
+                        $('.fps-btn').on('click', function() {
+                            return CanvasSplitMovie_01.changeFps(60);
+                        });
+                        $('.clear-btn').on('click', CanvasSplitMovie_01.spriteClear);
+                    }
+                });
+            });
+
+            ImgData.src = url;
+        }).call(this);
+    </script>
+</body>
+</html>
